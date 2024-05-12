@@ -23,6 +23,7 @@ namespace infoIntensive.Server.Db
         {
         }
 
-        public DbSet<tblUser> Users { get; set; }
+        public DbSet<tblUser> tblUsers { get; set; }
+        public DbSet<tblUserType> tblUserTypes { get; set; }
     }
 }

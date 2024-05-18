@@ -25,5 +25,8 @@ namespace infoIntensive.Server.Db
 
         public DbSet<tblUser> tblUsers { get; set; }
         public DbSet<tblUserType> tblUserTypes { get; set; }
+        public DbSet<tblLoginLog> tblLoginLogs { get; set; }
+        public DbSet<tblToken> tblTokens { get; set; }
+        public DbSet<tblTokenType> tblTokenTypes { get; set; }
     }
 }

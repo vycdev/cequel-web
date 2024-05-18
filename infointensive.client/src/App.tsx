@@ -20,13 +20,16 @@ const App = () => {
                 </div>
                 <ul className={menuOpen ? "open" : ""}>
                     <li>
-                        <ButtonLink to="/about" variant="outline-light">About</ButtonLink>
+                        <ButtonLink to="/about" variant="outline-dark">About</ButtonLink>
                     </li>
                     <li>
-                        <ButtonLink to="/services" variant="outline-light">Services</ButtonLink>
+                        <ButtonLink to="/services" variant="outline-dark">Services</ButtonLink>
                     </li>
                     <li>
-                        <ButtonLink to="/contact" variant="outline-light">Contact</ButtonLink>
+                        <ButtonLink to="/contact" variant="outline-dark">Contact</ButtonLink>
+                    </li>
+                    <li>
+                        <ButtonLink to="/login" variant="outline-dark">Login</ButtonLink>
                     </li>
                 </ul>
             </nav>

@@ -1,11 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import App from './App.tsx'
 import ErrorPage from './routes/error-page.tsx';
 import Home from './routes/Home.tsx';
+import Login from './routes/Login.tsx'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './main.tsx.css'
 
 const router = createBrowserRouter([
@@ -15,6 +17,10 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <Home />
+            },
+            {
+                path: "login",
+                element: <Login />
             }
         ]
     },

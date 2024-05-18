@@ -60,6 +60,8 @@ foreach (Type t in Assembly.GetExecutingAssembly().GetTypes())
             builder.Services.AddScoped(t);
 }
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 app.UseDefaultFiles();

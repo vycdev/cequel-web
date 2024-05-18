@@ -16,11 +16,13 @@ namespace infoIntensive.Server.Services.Auth
     public class AuthService
     {
         AppDbContext db;
-        AuthConfigModel authConfig; 
+        AuthConfigModel authConfig;
+        HttpContext httpContext;
 
-        public AuthService(AppDbContext db, IConfiguration config)
+        public AuthService(AppDbContext db, IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             this.db = db;
+            this.httpContext = httpContextAccessor.HttpContext;
 
             authConfig = new()
             {
@@ -72,7 +74,8 @@ namespace infoIntensive.Server.Services.Auth
                         idUser = user.Id,
                         Success = false,
                         Date = DateTime.UtcNow,
-                        Details = "" // TODO: Add browser, ip, location, etc. information
+                        UserAgent = httpContext.Request.Headers["User-Agent"].ToString(),
+                        IpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown"
                     });
 
                     db.SaveChanges();
@@ -85,7 +88,8 @@ namespace infoIntensive.Server.Services.Auth
                     idUser = user.Id,
                     Success = true,
                     Date = DateTime.UtcNow,
-                    Details = "" // TODO: Add browser, ip, location, etc. information
+                    UserAgent = httpContext.Request.Headers["User-Agent"].ToString(),
+                    IpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown"
                 });
 
                 return Authenticate(user);
@@ -165,7 +169,8 @@ namespace infoIntensive.Server.Services.Auth
                     idUser = user.Id,
                     Success = true,
                     Date = DateTime.UtcNow,
-                    Details = "" // TODO: Add browser, ip, location, etc. information
+                    UserAgent = httpContext.Request.Headers["User-Agent"].ToString(),
+                    IpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown"
                 });
 
                 db.SaveChanges();

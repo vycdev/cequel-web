@@ -1,6 +1,5 @@
 ﻿import { Link, Outlet } from 'react-router-dom';
 
-import './App.tsx.css';
 import { useState } from 'react';
 import ButtonLink from './components/ButtonLink';
 

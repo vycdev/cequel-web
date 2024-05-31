@@ -1,5 +1,3 @@
-import './Login.tsx.css'
-
 export default () => {
     return (
         <div id="loginPageContainer">

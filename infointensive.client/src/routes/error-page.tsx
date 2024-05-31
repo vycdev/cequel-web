@@ -1,6 +1,5 @@
 import { useRouteError } from "react-router-dom";
 
-import './error-page.tsx.css';
 import Button from "react-bootstrap/Button";
 
 export default function ErrorPage() {

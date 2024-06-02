@@ -17,12 +17,14 @@ export default () => {
     const [isLogin, setIsLogin] = useState(true);
     const [validated, setValidated] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [loginForm, setLoginForm] = useState<ILoginForm>({ username: "", email: "", password: "", confirmPassword: "" });
 
     const { user, setUser } = useContext<IUserContextState>(UserContext);
 
     const submitForm = (e) => {
+        setIsSubmitting(true);
         const form = e.currentTarget;
         e.preventDefault();
         e.stopPropagation();
@@ -63,6 +65,7 @@ export default () => {
                         setErrorMessage(data.message);
                     }
                 })
+                .then(() => setIsSubmitting(false))
             } else {
                 // Send register request
                 const data = { username: loginForm.username, email: loginForm.email, password: loginForm.password };
@@ -95,6 +98,7 @@ export default () => {
                         setErrorMessage(data.message);
                     }
                 })
+                .then(() => setIsSubmitting(false))
             }
         }
 
@@ -202,7 +206,7 @@ export default () => {
                                 </Button>
                             </div>
                             <div className="col">
-                                <Button type="submit" id="loginButton">
+                                <Button type="submit" id="loginButton" disabled={isSubmitting}>
                                     Submit
                                 </Button>
                             </div>

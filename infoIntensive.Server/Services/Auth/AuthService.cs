@@ -39,10 +39,10 @@ namespace infoIntensive.Server.Services.Auth
             try
             {
                 var user = db.tblUsers.FirstOrDefault(u => (u.UserName.ToLower() == model.Username.ToLower() || u.Email.ToLower() == model.Username.ToLower()) && u.Active)
-                    ?? throw new Exception("Invalid password or username.");
+                    ?? throw new ValidationException("Invalid password or username.");
 
-                if (user.LockEndTime != null && user.LockEndTime > DateTime.Now)
-                    throw new Exception("Too many attempts, please wait before trying again.");
+                if (user.LockEndTime != null && user.LockEndTime > DateTime.UtcNow)
+                    throw new ValidationException("Too many attempts, please wait before trying again.");
 
                 bool passwordResult = Crypto.VerifyHashedPassword(user.Password, model.Password);
 
@@ -80,7 +80,7 @@ namespace infoIntensive.Server.Services.Auth
 
                     db.SaveChanges();
 
-                    throw new Exception("Invalid password or username.");
+                    throw new ValidationException("Invalid password or username.");
                 }
 
                 db.Add(new tblLoginLog
@@ -91,6 +91,8 @@ namespace infoIntensive.Server.Services.Auth
                     UserAgent = httpContext.Request.Headers["User-Agent"].ToString(),
                     IpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown"
                 });
+
+                db.SaveChanges();
 
                 return Authenticate(user);
             }
@@ -143,10 +145,10 @@ namespace infoIntensive.Server.Services.Auth
                 var userEmail = db.tblUsers.FirstOrDefault(u => u.Email.ToLower() == model.Email.ToLower());
 
                 if (userName != null)
-                    throw new Exception("Username is already used.");
+                    throw new ValidationException("Username is already used.");
 
                 if (userEmail != null)
-                    throw new Exception("Email is already used.");
+                    throw new ValidationException("Email is already used.");
 
                 var user = new tblUser
                 {
@@ -202,6 +204,9 @@ namespace infoIntensive.Server.Services.Auth
                 
                 return new AuthResponseModel
                 {
+                    Username = user.UserName,
+                    Email = user.Email,
+                    idUserType = user.idUserType,
                     AccessToken = accessToken,
                     RefreshToken = refreshToken,
                 };

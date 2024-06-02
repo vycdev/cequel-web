@@ -27,10 +27,10 @@ namespace infoIntensive.Server.Controllers.Auth
             try
             {
                 if (model.Username.IsNullOrEmpty())
-                    return BadRequest("Username is required");
+                    throw new ValidationException("Username is required");
 
                 if (model.Password.IsNullOrEmpty())
-                    return BadRequest("Password is required");
+                    throw new ValidationException("Password is required");
 
                 AuthResponseModel result = AuthService.Login(model);
                 JwtSecurityToken refreshToken = new(result.RefreshToken);
@@ -41,14 +41,19 @@ namespace infoIntensive.Server.Controllers.Auth
                     HttpOnly = true,
                 });
 
-                return Ok(result);
+                result.RefreshToken = string.Empty;
+                return Ok(new ResultModel { Success = true, Result = result });
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
             }
             catch (Exception ex)
             {
                 if (Debugger.IsAttached)
-                    return BadRequest(ex.Message);
+                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
                 else
-                    return BadRequest();
+                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured."});
             }
         }
 
@@ -60,7 +65,7 @@ namespace infoIntensive.Server.Controllers.Auth
                 if (string.IsNullOrEmpty(token))
                     throw new Exception("No refresh token present.");
 
-                AuthResponseModel? result = AuthService.ValidateRefreshToken(token) ?? throw new Exception("Invalid refresh token");
+                AuthResponseModel? result = AuthService.ValidateRefreshToken(token) ?? throw new ValidationException("Invalid refresh token");
                 JwtSecurityToken refreshToken = new(result.RefreshToken);
 
                 Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
@@ -69,14 +74,19 @@ namespace infoIntensive.Server.Controllers.Auth
                     HttpOnly = true,
                 });
 
-                return Ok(result);
+                result.RefreshToken = string.Empty;
+                return Ok(new ResultModel { Success = true, Result = result });
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
             }
             catch (Exception ex)
             {
                 if (Debugger.IsAttached)
-                    return BadRequest(ex.Message);
+                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
                 else
-                    return BadRequest();
+                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured." });
             }
         }
 
@@ -86,13 +96,13 @@ namespace infoIntensive.Server.Controllers.Auth
             try
             {
                 if (model.Username.IsNullOrEmpty())
-                    return BadRequest("Username is required");
+                    throw new ValidationException("Username is required");
 
                 if (model.Password.IsNullOrEmpty())
-                    return BadRequest("Password is required");
+                    throw new ValidationException("Password is required");
 
                 if (model.Email.IsNullOrEmpty())
-                    return BadRequest("Email is required");
+                    throw new ValidationException("Email is required");
 
                 AuthResponseModel result = AuthService.Register(model);
                 JwtSecurityToken refreshToken = new(result.RefreshToken);
@@ -103,14 +113,19 @@ namespace infoIntensive.Server.Controllers.Auth
                     HttpOnly = true,
                 });
 
-                return Ok(result);
+                result.RefreshToken = string.Empty;
+                return Ok(new ResultModel { Success = true, Result = result });
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
             }
             catch (Exception ex)
             {
                 if (Debugger.IsAttached)
-                    return BadRequest(ex.Message);
+                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
                 else
-                    return BadRequest();
+                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured."});
             }
         }
 
@@ -130,14 +145,17 @@ namespace infoIntensive.Server.Controllers.Auth
 
                 return Unauthorized();
             }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
+            }
             catch (Exception ex)
             {
                 if (Debugger.IsAttached)
-                    return BadRequest(ex.Message);
+                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
                 else
-                    return BadRequest();
+                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured." });
             }
-
         }
     }
 }

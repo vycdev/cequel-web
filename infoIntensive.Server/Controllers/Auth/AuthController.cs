@@ -8,154 +8,146 @@ using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace infoIntensive.Server.Controllers.Auth
+namespace infoIntensive.Server.Controllers.Auth;
+
+[ApiController]
+[Route("[controller]/[action]")]
+public class AuthController(AuthService authService) : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]/[action]")]
-    public class AuthController : ControllerBase
+    [HttpPost]
+    public IActionResult Login([FromBody] AuthModel model)
     {
-        AuthService AuthService;
-
-        public AuthController(AuthService authService)
+        try
         {
-            AuthService = authService;
+            if (model.Username.IsNullOrEmpty())
+                throw new ValidationException("Username is required");
+
+            if (model.Password.IsNullOrEmpty())
+                throw new ValidationException("Password is required");
+
+            AuthResponseModel result = authService.Login(model);
+            JwtSecurityToken refreshToken = new(result.RefreshToken);
+
+            Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
+            {
+                Expires = refreshToken.ValidTo,
+                HttpOnly = true,
+            });
+
+            result.RefreshToken = string.Empty;
+            return Ok(new ResultModel { Success = true, Result = result });
         }
-
-        [HttpPost]
-        public IActionResult Login([FromBody] AuthModel model)
+        catch (ValidationException ex)
         {
-            try
-            {
-                if (model.Username.IsNullOrEmpty())
-                    throw new ValidationException("Username is required");
-
-                if (model.Password.IsNullOrEmpty())
-                    throw new ValidationException("Password is required");
-
-                AuthResponseModel result = AuthService.Login(model);
-                JwtSecurityToken refreshToken = new(result.RefreshToken);
-
-                Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
-                {
-                    Expires = refreshToken.ValidTo,
-                    HttpOnly = true,
-                });
-
-                result.RefreshToken = string.Empty;
-                return Ok(new ResultModel { Success = true, Result = result });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                if (Debugger.IsAttached)
-                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-                else
-                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured."});
-            }
+            return BadRequest(new ResultModel { Success = false, Message = ex.Message });
         }
-
-        [HttpPost]
-        public IActionResult Refresh([FromBody] string token)
+        catch (Exception ex)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(token))
-                    throw new Exception("No refresh token present.");
-
-                AuthResponseModel? result = AuthService.ValidateRefreshToken(token) ?? throw new ValidationException("Invalid refresh token");
-                JwtSecurityToken refreshToken = new(result.RefreshToken);
-
-                Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
-                {
-                    Expires = refreshToken.ValidTo,
-                    HttpOnly = true,
-                });
-
-                result.RefreshToken = string.Empty;
-                return Ok(new ResultModel { Success = true, Result = result });
-            }
-            catch (ValidationException ex)
-            {
+            if (Debugger.IsAttached)
                 return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                if (Debugger.IsAttached)
-                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-                else
-                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured." });
-            }
+            else
+                return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured."});
         }
+    }
 
-        [HttpPost]
-        public IActionResult Register([FromBody] AuthModel model)
+    [HttpPost]
+    public IActionResult Refresh([FromBody] string token)
+    {
+        try
         {
-            try
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("No refresh token present.");
+
+            AuthResponseModel? result = authService.ValidateRefreshToken(token) ?? throw new ValidationException("Invalid refresh token");
+            JwtSecurityToken refreshToken = new(result.RefreshToken);
+
+            Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
             {
-                if (model.Username.IsNullOrEmpty())
-                    throw new ValidationException("Username is required");
+                Expires = refreshToken.ValidTo,
+                HttpOnly = true,
+            });
 
-                if (model.Password.IsNullOrEmpty())
-                    throw new ValidationException("Password is required");
-
-                if (model.Email.IsNullOrEmpty())
-                    throw new ValidationException("Email is required");
-
-                AuthResponseModel result = AuthService.Register(model);
-                JwtSecurityToken refreshToken = new(result.RefreshToken);
-
-                Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
-                {
-                    Expires = refreshToken.ValidTo,
-                    HttpOnly = true,
-                });
-
-                result.RefreshToken = string.Empty;
-                return Ok(new ResultModel { Success = true, Result = result });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                if (Debugger.IsAttached)
-                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-                else
-                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured."});
-            }
+            result.RefreshToken = string.Empty;
+            return Ok(new ResultModel { Success = true, Result = result });
         }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult Logout()
+        catch (ValidationException ex)
         {
-            try
-            {
-                Claim? user = User.FindFirst("Id");
-                if (user != null && int.TryParse(user.Value, out int id))
-                {
-                    AuthService.LogOut(id);
-
-                    return NoContent();
-                }
-
-                return Unauthorized();
-            }
-            catch (ValidationException ex)
-            {
+            return BadRequest(new ResultModel { Success = false, Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            if (Debugger.IsAttached)
                 return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-            }
-            catch (Exception ex)
+            else
+                return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured." });
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Register([FromBody] AuthModel model)
+    {
+        try
+        {
+            if (model.Username.IsNullOrEmpty())
+                throw new ValidationException("Username is required");
+
+            if (model.Password.IsNullOrEmpty())
+                throw new ValidationException("Password is required");
+
+            if (model.Email.IsNullOrEmpty())
+                throw new ValidationException("Email is required");
+
+            AuthResponseModel result = authService.Register(model);
+            JwtSecurityToken refreshToken = new(result.RefreshToken);
+
+            Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
             {
-                if (Debugger.IsAttached)
-                    return BadRequest(new ResultModel { Success = false, Message = ex.Message });
-                else
-                    return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured." });
+                Expires = refreshToken.ValidTo,
+                HttpOnly = true,
+            });
+
+            result.RefreshToken = string.Empty;
+            return Ok(new ResultModel { Success = true, Result = result });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new ResultModel { Success = false, Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            if (Debugger.IsAttached)
+                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
+            else
+                return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured."});
+        }
+    }
+
+    [Authorize]
+    [HttpPost]
+    public IActionResult Logout()
+    {
+        try
+        {
+            Claim? user = User.FindFirst("Id");
+            if (user != null && int.TryParse(user.Value, out int id))
+            {
+                authService.LogOut(id);
+
+                return NoContent();
             }
+
+            return Unauthorized();
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new ResultModel { Success = false, Message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            if (Debugger.IsAttached)
+                return BadRequest(new ResultModel { Success = false, Message = ex.Message });
+            else
+                return BadRequest(new ResultModel { Success = false, Message = "Unhandled exception has occured." });
         }
     }
 }

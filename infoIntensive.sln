@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "infoIntensive.Server", "infoIntensive.Server\infoIntensive.Server.csproj", "{8F3AB3ED-711D-4561-A748-F5E61E435AB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "infoIntensive.Server", "infoIntensive.Server\infoIntensive.Server.csproj", "{8F3AB3ED-711D-4561-A748-F5E61E435AB3}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "infointensive.client", "infointensive.client\infointensive.client.esproj", "{0F312D85-0CA8-443F-850B-7466EC3950D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interpreter_lib", "..\interpreter-lib\Interpreter_lib.csproj", "{5B38930B-58A9-488D-8BCB-6A49C82EEA90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{0F312D85-0CA8-443F-850B-7466EC3950D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F312D85-0CA8-443F-850B-7466EC3950D3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F312D85-0CA8-443F-850B-7466EC3950D3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5B38930B-58A9-488D-8BCB-6A49C82EEA90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B38930B-58A9-488D-8BCB-6A49C82EEA90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B38930B-58A9-488D-8BCB-6A49C82EEA90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B38930B-58A9-488D-8BCB-6A49C82EEA90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

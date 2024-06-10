@@ -9,7 +9,14 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="public\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Include="public\favicon.ico" />
   </ItemGroup>
 </Project>

@@ -35,6 +35,24 @@ export const clearLSUserContext = () => {
     localStorage.removeItem("userContext");
 }
 
+// TODO: make a queue for the authorized requests and implement auto token refreshing
+export const authorizedRequest = async (url: string, method: string, body?: any) => {
+    // Get user context
+    const userContext = getLSUserContext();
+
+    // Send request
+    const response = await fetch(url, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + userContext?.accessToken
+        },
+        body: JSON.stringify(body)
+    });
+
+    return response;
+}
+
 const App = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [user, setUser] = useState<IUserContext>(getLSUserContext());

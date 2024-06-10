@@ -1,5 +1,11 @@
+import CodeEditor from "../components/CodeEditor"
+
 const Home = () => {
-    return <h1>Home</h1>;
+    return <div id="homeWrapper">
+
+        <CodeEditor></CodeEditor>
+
+    </div>;
 };
 
 export default Home;

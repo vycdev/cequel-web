@@ -28,9 +28,9 @@ const InterpretDemo = async (code: string, language: string) => {
 }
 
 export default () => {
-    const [code, setCode] = useState("print('Hello World!')");
+    const [code, setCode] = useState("// Simple hello world in pseudocode\nwrite('Hello World!')\n");
     const [output, setOutput] = useState("Run your code for the output to change.");
-    const [language, setLanguage] = useState("Romanian");
+    const [language, setLanguage] = useState("English");
 
 
     const Run = async (_) => {
@@ -39,17 +39,28 @@ export default () => {
         setOutput((result.success ? result.output : result.message) + "\nExecution Time: " + result.executionTime )
     }
 
+    const OnLanguageChange = (e) => {
+        if (code === "// Simple hello world in pseudocode\nwrite('Hello World!')\n")
+            setCode("// Simple hello world in pseudocode\nscrie('Hello World!')\n")
+        else
+            setCode("// Simple hello world in pseudocode\nwrite('Hello World!')\n")
+
+        setLanguage(e.target.value);
+    }
+
+    // TODO: CHANGE LANGAUGE from javascript to something custom
+
     return (
         <div id="codeEditorWrapper">
             <div className="toolbarWrapper">
-                <FormSelect className="selector" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                <FormSelect className="selector" value={language} onChange={OnLanguageChange}>
                     <option>Romanian</option>
                     <option>English</option>
                 </FormSelect>
                 <Button className="button" variant="outline-success" onClick={Run}><FontAwesomeIcon icon={faPlay} /> Run</Button>
             </div>
             <div className="inputBoxWrapper">
-                <Editor value={code} onChange={(value, _) => setCode(value ?? "")} options={{ padding: { top: 10, bottom: 10 }, minimap: { enabled: false } }} className="editor" theme="vs-dark"></Editor>
+                <Editor language="javascript" value={code} onChange={(value, _) => setCode(value ?? "")} options={{ padding: { top: 10, bottom: 10 }, minimap: { enabled: false } }} className="editor" theme="vs-dark"></Editor>
             </div>
             <div className="outputBoxWrapper">
                 <textarea value={output} spellCheck={false} disabled></textarea>

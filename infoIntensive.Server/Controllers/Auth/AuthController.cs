@@ -11,7 +11,7 @@ using System.Security.Claims;
 namespace infoIntensive.Server.Controllers.Auth;
 
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("api/[controller]/[action]")]
 public class AuthController(AuthService authService) : ControllerBase
 {
     [HttpPost]

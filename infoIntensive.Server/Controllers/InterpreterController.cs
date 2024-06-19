@@ -14,7 +14,7 @@ public class InterpretModel
 }
 
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("api/[controller]/[action]")]
 public class InterpreterController(InterpreterService iService) : ControllerBase
 {
     [HttpPost]

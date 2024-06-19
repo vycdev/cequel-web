@@ -45,8 +45,23 @@ body {
     height: 100%;
     width: 100%;
 
-    background-image: url("/background.jpg");
-    background-repeat: no-repeat;
+  background: linear-gradient(-45deg, #00acca, #6a3ce7, #23a6d5, #6a00e2);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* error-page.tsx */
@@ -78,7 +93,7 @@ nav {
     border-image-slice: 1;
 
     /* Drop shadow */
-    box-shadow: 0px 1px 8px 1px #b5b5b5;
+    /*box-shadow: 0px 1px 8px 1px #b5b5b5;*/
 }
 
 nav .title {
@@ -222,8 +237,6 @@ nav .menu span {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    background: white;
 }
 
 /* CodeEditor */
@@ -237,11 +250,13 @@ nav .menu span {
     height: 600px;
     padding: 20px;
 
+    background: white;
+
     border-radius: 10px;
 
-    -webkit-box-shadow: 1px 1px 14px -3px rgba(97,97,97,1);
-    -moz-box-shadow: 1px 1px 14px -3px rgba(97,97,97,1);
-    box-shadow: 1px 1px 14px -3px rgba(97,97,97,1);
+    -webkit-box-shadow: 1px 1px 14px -3px rgb(0, 0, 0);
+    -moz-box-shadow: 1px 1px 14px -3px rgb(0, 0, 0);
+    box-shadow: 1px 1px 14px -3px rgb(0, 0, 0);
 }
 
 

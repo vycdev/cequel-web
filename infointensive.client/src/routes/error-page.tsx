@@ -13,7 +13,7 @@ export default function ErrorPage() {
             <p>
                 <i>{error?.statusText || error?.message}</i>
             </p>
-            <Button onClick={() => history.back()} variant="secondary" > Go Back </Button>
+            <Button onClick={() => history.back()} variant="light" > Go Back </Button>
         </div>
     );
 }

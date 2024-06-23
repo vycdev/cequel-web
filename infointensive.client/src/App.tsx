@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import ButtonLink from './components/ButtonLink';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 export type IUserContext = {
     username: string;
     email: string;
@@ -79,7 +82,7 @@ const App = () => {
             <UserContext.Provider value={{ user, setUser }}>
                 <nav>
                     <Link to="/" className="title">
-                        InfoIntensive
+                        💻 InfoIntensive
                     </Link>
                     <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
                         <span></span>
@@ -87,14 +90,15 @@ const App = () => {
                         <span></span>
                     </div>
                     <ul className={menuOpen ? "open" : ""}>
+                        {user ?
+                            <>
+                                <li>
+                                    <ButtonLink to="/exercises" variant="outline-dark">Exercises</ButtonLink>
+                                </li>
+                            </>                         
+                        : ""}
                         <li>
-                            <ButtonLink to="/about" variant="outline-dark">About</ButtonLink>
-                        </li>
-                        <li>
-                            <ButtonLink to="/services" variant="outline-dark">Services</ButtonLink>
-                        </li>
-                        <li>
-                            <ButtonLink to="/contact" variant="outline-dark">Contact</ButtonLink>
+                            <ButtonLink to="/docs" variant="outline-dark">Docs</ButtonLink>
                         </li>
                         {!user ? 
                             <li>
@@ -104,13 +108,12 @@ const App = () => {
                                 <ButtonLink to="/" onClick={logout} variant="outline-dark">Logout</ButtonLink>
                             </li>
                         }
-                        {user ? <li id="username">
-                            { user?.username }
-                        </li>
+                        {user ?
+                            <li>
+                                <ButtonLink to="/profile" onClick={logout} variant="outline-primary"><FontAwesomeIcon icon={faUser} />{"  "} { user?.username }</ButtonLink>
+                            </li>
                         : ""}
                     </ul>
-                    
-                   
                 </nav>
                 <Outlet></Outlet>
             </UserContext.Provider>

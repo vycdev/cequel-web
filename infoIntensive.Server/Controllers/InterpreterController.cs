@@ -22,6 +22,65 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
     {
         try
         {
+            if(string.IsNullOrWhiteSpace(model.Code) || string.IsNullOrWhiteSpace(model.Language))
+            {
+                return new InterpretResponseModel
+                {
+                    Success = false,
+                    Message = "Code and language are required."
+                };
+            }
+
+            if(model.Code.Length > 500)
+            {
+                return new InterpretResponseModel
+                {
+                    Success = false,
+                    Message = "Code is too long. Maximum 1000 characters."
+                };
+            }
+
+            return iService.Interpret(model.Code, model.Language);
+        }
+        catch (Exception)
+        {
+            if(Debugger.IsAttached)
+            {
+                throw;
+            }
+
+            return new InterpretResponseModel
+            {
+                Success = false,
+                Message = "An unexpected error occurred. Please try again later."
+            };
+        }
+    }
+
+    [Authorize]
+    [HttpPost]
+    public InterpretResponseModel Interpret(InterpretModel model)
+    {
+        try
+        {
+            if(string.IsNullOrWhiteSpace(model.Code) || string.IsNullOrWhiteSpace(model.Language))
+            {
+                return new InterpretResponseModel
+                {
+                    Success = false,
+                    Message = "Code and language are required."
+                };
+            }
+
+            if(model.Code.Length > 2000)
+            {
+                return new InterpretResponseModel
+                {
+                    Success = false,
+                    Message = "Code is too long. Maximum 1000 characters."
+                };
+            }
+
             return iService.Interpret(model.Code, model.Language);
         }
         catch (Exception)

@@ -38,7 +38,6 @@ export const clearLSUserContext = () => {
     localStorage.removeItem("userContext");
 }
 
-// TODO: make a queue for the authorized requests and implement auto token refreshing
 export const authorizedRequest = async (url: string, method: string, body?: any) => {
     // Get user context
     const userContext = getLSUserContext();
@@ -53,6 +52,7 @@ export const authorizedRequest = async (url: string, method: string, body?: any)
         body: JSON.stringify(body)
     }).then(async response => {
         if (response.status === 401) {
+            // TODO: implement queue for refresh requests that are happening in parallel
             // refresh token and try again
             const refreshTokenResponse = await fetch("/api/auth/refresh", {
                 method: "POST", 
@@ -125,7 +125,7 @@ const App = () => {
                             </>                         
                         : ""}
                         <li>
-                            <ButtonLink to="/docs" variant="outline-dark">Docs</ButtonLink>
+                            <ButtonLink to="/documentation" variant="outline-dark">Docs</ButtonLink>
                         </li>
                         {!user ? 
                             <li>

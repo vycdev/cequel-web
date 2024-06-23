@@ -10,7 +10,7 @@ const markdown =
 ##### Getting Started
 1. **Write Your Code**: Use the editor on the right to write your pseudocode.
 2. **Run Your Code**: Click the 'Run' button to execute your code and see the results.
-3. **Language Features**: If you want to learn more about the language features, check out the [Docs](/docs) page.
+3. **Language Features**: If you want to learn more about the language features, check out the [Docs](/documentation) page.
 
 ##### Restrictions
 Unfortuantely, to avoid overloading the platform, we have set some restrictions in place:

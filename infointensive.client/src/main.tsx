@@ -9,6 +9,9 @@ import Home from './routes/Home.tsx';
 import Login from './routes/Login.tsx'
 
 import './main.tsx.css'
+import Documentation from './routes/Documentation.tsx';
+import Exercises from './routes/Exercises.tsx';
+import Exercise from './routes/Exercise.tsx';
 
 const router = createBrowserRouter([
     {
@@ -21,6 +24,18 @@ const router = createBrowserRouter([
             {
                 path: "login",
                 element: <Login />
+            },
+            {
+                path: "documentation",
+                element: <Documentation />
+            },
+            {
+                path: "exercises",
+                element: <Exercises />
+            },
+            {
+                path: "exercise/:id",
+                element: <Exercise />
             }
         ]
     },

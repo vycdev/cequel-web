@@ -1,7 +1,7 @@
 import { Button, FormSelect } from "react-bootstrap";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faRotate } from '@fortawesome/free-solid-svg-icons';
 
 import Editor from '@monaco-editor/react';
 import { useState, useEffect, useContext } from "react";
@@ -67,8 +67,15 @@ export default () => {
         setOutput(resultString);
     }
 
+    const Reset = (_) => {
+        if (language === "Romanian")
+            setCode("// Simple hello world in pseudocode\nscrie 'Hello World!'\n")
+        else
+            setCode("// Simple hello world in pseudocode\nwrite 'Hello World!'\n")
+    }
+
     const OnLanguageChange = (e) => {
-        if (code === "// Simple hello world in pseudocode\nwrite 'Hello World!'\n")
+        if (e.target.value === "English")
             setCode("// Simple hello world in pseudocode\nscrie 'Hello World!'\n")
         else
             setCode("// Simple hello world in pseudocode\nwrite 'Hello World!'\n")
@@ -94,10 +101,11 @@ export default () => {
                     <option>Romanian</option>
                     <option>English</option>
                 </FormSelect>
+                <Button className="button" variant="outline-danger" onClick={Reset}><FontAwesomeIcon icon={faRotate} /> Reset</Button>
                 <Button className="button" variant="outline-success" onClick={Run} disabled={buttonDisabled || characterCount > maxCharacterCount}><FontAwesomeIcon icon={faPlay} /> Run</Button>
             </div>
             <div className="inputBoxWrapper">
-                <Editor language="javascript" value={code} onChange={(value, _) => setCode(value ?? "")} options={{ padding: { top: 10, bottom: 10 }, minimap: { enabled: false } }} className="editor" theme="vs-dark"></Editor>
+                <Editor value={code} onChange={(value, _) => setCode(value ?? "")} options={{ padding: { top: 10, bottom: 10 }, minimap: { enabled: false } }} className="editor" theme="vs-dark"></Editor>
             </div>
             <div className="outputBoxWrapper">
                 <textarea value={output} spellCheck={false} disabled></textarea>

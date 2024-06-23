@@ -51,10 +51,12 @@ public class AuthController(AuthService authService) : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Refresh([FromBody] string token)
+    public IActionResult Refresh()
     {
         try
         {
+            string? token = Request.Cookies["refreshToken"];
+
             if (string.IsNullOrEmpty(token))
                 throw new Exception("No refresh token present.");
 

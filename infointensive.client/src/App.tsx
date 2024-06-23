@@ -51,6 +51,32 @@ export const authorizedRequest = async (url: string, method: string, body?: any)
             "Authorization": "Bearer " + userContext?.accessToken
         },
         body: JSON.stringify(body)
+    }).then(async response => {
+        if (response.status === 401) {
+            // refresh token and try again
+            const refreshTokenResponse = await fetch("/api/auth/refresh", {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json",
+                }, 
+            });
+
+            if (refreshTokenResponse.ok) {
+                const refreshTokenResult = await refreshTokenResponse.json();
+                if (refreshTokenResult.success) {
+                    const newUserContext = { ...userContext, ...refreshTokenResult.result };
+                    setLSUserContext(newUserContext);
+                    return await authorizedRequest(url, method, body);
+                }
+            } 
+
+            // Clear user data from local storage
+            clearLSUserContext();
+
+            // Redirect to login
+            window.location.href = "/login";
+        } else 
+            return response; 
     });
 
     return response;
@@ -61,8 +87,6 @@ const App = () => {
     const [user, setUser] = useState<IUserContext>(getLSUserContext());
 
     const logout = (_) => {
-        console.log(user);
-
         // Send logout request
         fetch("/api/auth/logout", {
             method: "POST",
@@ -75,6 +99,9 @@ const App = () => {
         // Clear user data
         setUser(null);
         clearLSUserContext();
+
+        // Redirect to login
+        window.location.href = "/login";
     }
 
     return (

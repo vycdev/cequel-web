@@ -236,9 +236,25 @@ nav .menu span {
     width: 100%;
 
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+
     justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+
+    overflow-y: auto;
+
+    margin-top: -35px;
+    padding: 50px;
+}
+
+#homeWrapper .contentBoxWrapper .contentBox {
+    width: 800px;
+    height: 80vh;
+    min-height: 350px;
 }
 
 /* CodeEditor */
@@ -246,10 +262,11 @@ nav .menu span {
 #codeEditorWrapper {
     width: 800px;
     display: flex;
-    -ms-flex-direction: inherit;
-    -webkit-flex-direction: inherit;
-    flex-direction: inherit;
-    height: 600px;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    height: 80vh;
+    min-height: 350px;
     padding: 20px;
 
     background: white;
@@ -357,3 +374,16 @@ nav .menu span {
 }
 
 
+/* ContentBox */
+
+.contentBox {
+    background: white;
+    padding: 25px 50px;
+    border-radius: 10px;
+    width: 800px;
+    -webkit-box-shadow: 1px 1px 14px -3px rgb(0, 0, 0);
+    -moz-box-shadow: 1px 1px 14px -3px rgb(0, 0, 0);
+    box-shadow: 1px 1px 14px -3px rgb(0, 0, 0);
+
+    overflow-y: auto;
+}

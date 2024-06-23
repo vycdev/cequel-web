@@ -110,7 +110,7 @@ const App = () => {
                         }
                         {user ?
                             <li>
-                                <ButtonLink to="/profile" onClick={logout} variant="outline-primary"><FontAwesomeIcon icon={faUser} />{"  "} { user?.username }</ButtonLink>
+                                <ButtonLink to="/profile" variant="outline-primary"><FontAwesomeIcon icon={faUser} />{"  "} { user?.username }</ButtonLink>
                             </li>
                         : ""}
                     </ul>

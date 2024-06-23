@@ -68,10 +68,10 @@ export default () => {
     }
 
     const OnLanguageChange = (e) => {
-        if (code === "// Simple hello world in pseudocode\nwrite('Hello World!')\n")
-            setCode("// Simple hello world in pseudocode\nscrie('Hello World!')\n")
+        if (code === "// Simple hello world in pseudocode\nwrite 'Hello World!'\n")
+            setCode("// Simple hello world in pseudocode\nscrie 'Hello World!'\n")
         else
-            setCode("// Simple hello world in pseudocode\nwrite('Hello World!')\n")
+            setCode("// Simple hello world in pseudocode\nwrite 'Hello World!'\n")
 
         setLanguage(e.target.value);
     }

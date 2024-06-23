@@ -220,13 +220,13 @@ public class AuthService
 
     private string GenerateAccessToken(tblUser user)
     {
-        IEnumerable<Claim> claims = new Claim[]
-        {
+        IEnumerable<Claim> claims =
+        [
             new Claim("Id", user.Id.ToString()),
             new Claim("Email", "Admin"),
             new Claim("UserType", user.idUserType.ToString()),
             new Claim(ClaimTypes.Name, user.UserName),
-        };
+        ];
 
         return GenerateToken(authConfig.AccessTokenSecret, authConfig.AccessTokenExpirationMinutes, authConfig.Issuer, claims);
     }

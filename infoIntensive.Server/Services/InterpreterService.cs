@@ -1,5 +1,7 @@
 ﻿using infoIntensive.Server.Db;
+using infoIntensive.Server.Db.Models;
 using infoIntensive.Server.Models;
+using infoIntensive.Server.Utils;
 using Interpreter_lib.Evaluator;
 using Interpreter_lib.Parser;
 using Interpreter_lib.Tokenizer;
@@ -9,7 +11,7 @@ namespace infoIntensive.Server.Services;
 
 public class InterpreterService(AppDbContext dbContext)
 {
-    public InterpretResponseModel Interpret(string code, string language)
+    public InterpretResponseModel Interpret(string code, string language, int userId)
     {
         DateTime startTime = DateTime.Now;
         
@@ -57,8 +59,20 @@ public class InterpreterService(AppDbContext dbContext)
                 ExecutionTime = DateTime.Now - startTime
             };
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            dbContext.Add(new tblError
+            {
+                InsertDate = DateTime.UtcNow,
+                Message = ex.Message,
+                StackTrace = (ex?.StackTrace ?? string.Empty),
+                idUser = userId, 
+                Extra1 = code.RemoveNulls(),
+                Extra2 = language
+            });
+
+            dbContext.SaveChanges();
+
             throw;
         }
     }

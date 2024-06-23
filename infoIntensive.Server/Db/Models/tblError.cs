@@ -3,19 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace infoIntensive.Server.Db.Models;
 
-public class tblToken
+public class tblError
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    public string Token { get; set; }
-    public int idTokenType { get; set; }
+    public string Message { get; set; }
+    public string StackTrace { get; set; }
+    public DateTime InsertDate { get; set; }
     public int idUser { get; set; }
-    
-
-    [ForeignKey(nameof(idTokenType))]
-    public tblTokenType tblTokenType { get; set; }
-    [ForeignKey(nameof(idUser))]
-    public tblUser tblUser { get; set; }
-
+    public string? Extra1 { get; set; } 
+    public string? Extra2 { get; set; } 
+    public string? Extra3 { get; set; } 
 }

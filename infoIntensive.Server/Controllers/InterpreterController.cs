@@ -3,7 +3,9 @@ using infoIntensive.Server.Services;
 using Interpreter_lib.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace infoIntensive.Server.Controllers;
 
@@ -40,7 +42,7 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
                 };
             }
 
-            return iService.Interpret(model.Code, model.Language);
+            return iService.Interpret(model.Code, model.Language, 0);
         }
         catch (Exception)
         {
@@ -63,6 +65,8 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
     {
         try
         {
+            _ = int.TryParse(User.FindFirstValue("Id"), out int userId);
+
             if(string.IsNullOrWhiteSpace(model.Code) || string.IsNullOrWhiteSpace(model.Language))
             {
                 return new InterpretResponseModel
@@ -81,7 +85,7 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
                 };
             }
 
-            return iService.Interpret(model.Code, model.Language);
+            return iService.Interpret(model.Code, model.Language, userId);
         }
         catch (Exception)
         {

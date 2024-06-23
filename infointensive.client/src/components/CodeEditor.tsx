@@ -46,7 +46,7 @@ const Interpret = async (code: string, language: string) => {
 export default () => {
     const userContext = useContext(UserContext);
 
-    const [code, setCode] = useState("// Simple hello world in pseudocode\nwrite('Hello World!')\n");
+    const [code, setCode] = useState("// Simple hello world in pseudocode\nwrite 'Hello World!' \n");
     const [output, setOutput] = useState("Run your code for the output to change.");
     const [language, setLanguage] = useState("English");
     const [buttonDisabled, setButtonDisabled] = useState(false);

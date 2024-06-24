@@ -29,4 +29,7 @@ public class AppDbContext : DbContext
     public DbSet<tblToken> tblTokens { get; set; }
     public DbSet<tblTokenType> tblTokenTypes { get; set; }
     public DbSet<tblError> tblErrors { get; set; }
+    public DbSet<tblExercise> tblExercises { get; set; }
+    public DbSet<tblExercise_User> tblExercise_Users { get; set; }
+    public DbSet<tblExercise_Variable> tblExercise_Variable { get; set; }
 }

@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
     "@monaco-editor/react": "^4.6.0",
+    "@table-library/react-table-library": "^4.1.7",
     "bootstrap": "^5.3.3",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",

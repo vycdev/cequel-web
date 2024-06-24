@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom"
 
+// TODO: Lock the exercise behind a login
 
 export default () => {
     const { id } = useParams();

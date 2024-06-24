@@ -404,3 +404,50 @@ nav .menu span {
     height: 80vh;
     min-height: 350px;
 }
+
+/* Exercises page */
+
+#exercisesWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 50px;
+
+
+}
+
+#exercisesWrapper .contentBox {
+    width: 90vw;
+    height: calc(100vh - 170px);
+    overflow-y: hidden;
+}
+
+#exercisesWrapper .linkHeader div,
+#exercisesWrapper .completedHeader div,
+#exercisesWrapper .completedCell div,
+#exercisesWrapper .linkCell div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#exercisesWrapper .table {
+    height: calc(100% - 55px);
+    overflow-y: auto;
+
+    --data-table-library_grid-template-columns: minmax(0px, 0.3fr) minmax(0px, 1.6fr) minmax(0px, 1fr) minmax(0px, 0.6fr) minmax(0px, 0.6fr) !important; 
+}
+
+#exercisesWrapper .table { 
+    cursor: pointer;
+}
+
+#exercisesWrapper .table .td {
+    background: white;
+}
+
+#exercisesWrapper .table .row:hover .td {
+    background: #d8e9ff;
+}

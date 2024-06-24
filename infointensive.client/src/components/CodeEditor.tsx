@@ -313,10 +313,37 @@ export default () => {
     }
 
     const OnLanguageChange = (e) => {
-        if (e.target.value === "English")
-            setCode("// Simple hello world in pseudocode\nscrie 'Hello World!'\n")
+        if (e.target.value === "English") {
+            let translatedCode = code
+                .replace("scrie ", "write ")
+                .replace("daca ", "if ")
+                .replace("atunci ", "then ")
+                .replace("altfel ", "else ")
+                .replace("cat timp ", "while ")
+                .replace("executa ", "do ")
+                .replace("repeta ", "repeat ")
+                .replace("pana cand ", "until ")
+                .replace("pentru ", "for ")
+                .replace("citeste ", "read ");
+
+            setCode(translatedCode);
+        }
         else
-            setCode("// Simple hello world in pseudocode\nwrite 'Hello World!'\n")
+        {
+            let translatedCode = code
+                .replace("write ", "scrie ")
+                .replace("if ", "daca ")
+                .replace("then ", "atunci ")
+                .replace("else ", "altfel ")
+                .replace("while ", "cat timp ")
+                .replace("do ", "executa ")
+                .replace("repeat ", "repeta ")
+                .replace("until ", "pana cand ")
+                .replace("for ", "pentru ")
+                .replace("read ", "citeste ");
+
+            setCode(translatedCode);
+        }
 
         setLanguage(e.target.value);
     }

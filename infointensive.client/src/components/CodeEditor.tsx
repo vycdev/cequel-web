@@ -311,14 +311,16 @@ const EvaluateExercise = async (code: string, language: string, exerciseId: numb
 interface CodeEditorProps {
     defaultCode?: string
     exerciseId?: string
+    savedCode?: string
 }
 
 export default (props: CodeEditorProps) => {
     const userContext = useContext(UserContext);
     const defaultCodeValue = props.defaultCode ?? "// Simple hello world in pseudocode\nwrite 'Hello World!'\n";
     const exerciseId = props?.exerciseId;
+    const savedCode = props?.savedCode;
 
-    const [code, setCode] = useState(defaultCodeValue);
+    const [code, setCode] = useState(savedCode || defaultCodeValue);
     const [output, setOutput] = useState("Run your code for the output to change.");
     const [language, setLanguage] = useState("English");
     const [buttonDisabled, setButtonDisabled] = useState(false);

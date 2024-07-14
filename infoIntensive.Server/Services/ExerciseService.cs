@@ -25,6 +25,7 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
                     Difficulty = exercise.Difficulty,
                     Description = exercise.Description,
                     DefaultCode = exercise.DefaultCode,
+                    SavedCode = tblExercise_User?.Code ?? string.Empty,
                     IsComplete = tblExercise_User?.IsCompleted ?? false,
                     CompletionDate = tblExercise_User?.CompletedDate,
                 };
@@ -123,6 +124,7 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
                     IsCompleted = false,
                     CompletedDate = null,
                     Code = code.RemoveNulls(),
+                    ExecutionTime = "",
                 };
 
                 dbContext.tblExercise_Users.Add(tblExercise_User);

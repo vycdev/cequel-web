@@ -8,7 +8,8 @@ interface IExercise {
     title: string,
     description: string,
     defaultCode: string,
-    difficulty: number
+    difficulty: number, 
+    savedCode: string
 }
 
 export default () => {
@@ -45,7 +46,7 @@ export default () => {
             </div>
             {exercise != null ? 
                 <div className="codeEditorWrapper">
-                    <CodeEditor defaultCode={exercise?.defaultCode} exerciseId={id} />
+                    <CodeEditor defaultCode={exercise?.defaultCode} exerciseId={id} savedCode={exercise?.savedCode} />
                 </div>
             : <></>}
         </div>

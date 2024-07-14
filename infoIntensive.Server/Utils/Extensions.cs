@@ -13,4 +13,9 @@ public static class Extensions
     {
         return value.Replace("\0", "");
     }
+
+    public static T PickRandom<T>(this List<T> list)
+    {
+        return list[new Random().Next(0, list.Count)];
+    }
 }

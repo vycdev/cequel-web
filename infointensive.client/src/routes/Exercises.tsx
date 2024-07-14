@@ -9,8 +9,9 @@ import {
     HeaderCell,
     Cell,
 } from '@table-library/react-table-library/table';
-import { authorizedRequest } from '../App';
-import { useEffect, useState } from 'react';
+import { UserContext, authorizedRequest } from '../App';
+import { useContext, useEffect, useState } from 'react';
+import ContentBox from '../components/ContentBox';
 
 //const nodes = [
 //    {
@@ -130,6 +131,7 @@ const getVariant = (difficulty) => {
 }
 
 export default () => {
+    const userContext = useContext(UserContext);
     const [nodes, setNodes] = useState([]);
 
     const getExercises = async () => {
@@ -143,6 +145,16 @@ export default () => {
     useEffect(() => {
         getExercises();
     }, []);
+
+    if (userContext.user === null) {
+        return (
+            <div id="homeWrapper" >
+                <div className="contentBoxWrapper">
+                    <ContentBox>{"# Unauthorized\nYou have to be logged in to access exercises"}</ContentBox>
+                </div>
+            </div>
+        )
+    }
 
     return <div id="exercisesWrapper">
         <div className="contentBox">

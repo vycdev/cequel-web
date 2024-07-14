@@ -11,7 +11,7 @@ namespace infoIntensive.Server.Services;
 
 public class InterpreterService(AppDbContext dbContext)
 {
-    public InterpretResponseModel Interpret(string code, string language, int userId)
+    public InterpretResponseModel Interpret(string code, string language, int userId, Dictionary<string, Atom>? variables = null)
     {
         DateTime startTime = DateTime.Now;
 
@@ -23,6 +23,10 @@ public class InterpreterService(AppDbContext dbContext)
             parser.Parse();
 
             Evaluator evaluator = new(startTime, TimeSpan.FromSeconds(userId == 0 ? 0.5f : 5));
+
+            if (variables != null)
+                evaluator.Variables = variables;
+
             evaluator.Evaluate(parser.GetTree());
 
             if (evaluator.Output.Length > 0 && evaluator.Output[0] == '\n')

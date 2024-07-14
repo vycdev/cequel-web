@@ -26,8 +26,6 @@ public class ExerciseController(ExerciseService eService) : ControllerBase
     [HttpGet]
     public IActionResult GetExercise(int id)
     {
-
-
         return Ok(eService.GetExercise(id));
     }
 

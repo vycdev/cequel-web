@@ -113,7 +113,7 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
                     Result = codeResult
                 };
 
-            tblExercise_User tblExercise_User = dbContext.tblExercise_Users.Where(ue => ue.idExercise == exerciseId && ue.idUser == userId).FirstOrDefault();
+            tblExercise_User? tblExercise_User = dbContext.tblExercise_Users.Where(ue => ue.idExercise == exerciseId && ue.idUser == userId).FirstOrDefault();
 
             if(tblExercise_User == null)
             {

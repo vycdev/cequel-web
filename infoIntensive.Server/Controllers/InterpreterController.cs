@@ -36,7 +36,7 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
                 return new InterpretResponseModel
                 {
                     Success = false,
-                    Message = "Code is too long. Maximum 2000 characters."
+                    Message = "Code is too long. Maximum 500 characters."
                 };
             }
 

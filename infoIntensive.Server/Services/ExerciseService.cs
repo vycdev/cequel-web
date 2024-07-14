@@ -3,6 +3,7 @@ using infoIntensive.Server.Db.Models;
 using infoIntensive.Server.Models;
 using infoIntensive.Server.Utils;
 using Interpreter_lib.Evaluator;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace infoIntensive.Server.Services;
 
@@ -58,7 +59,7 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
         }
     }
 
-    public ExerciseResultModel EvaluateExercise(int userId, int exerciseId, string code)
+    public ExerciseResultModel EvaluateExercise(int userId, int exerciseId, string code, string language)
     {
         try
         {
@@ -94,18 +95,52 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
                 {
                     tblExercise_Variable variable = allVariables.Where(v => v.Name == variableName).ToList().PickRandom();
 
-                    variablesDictionary.Add(variable.Name, new Atom(variable.Type == "Number" ? AtomType.NUMBER : AtomType.STRING, variable.Value));
+                    variablesDictionary.Add(variable.Name, new Atom(variable.Type == "Number" ? AtomType.NUMBER : AtomType.STRING, variable.Type == "Number" ? float.Parse(variable.Value) : variable.Value));
                 }
 
                 variablesDictionaryList.Add(variablesDictionary);
             }
 
+            InterpretResponseModel? codeResult = null;
+
+            if (variablesDictionaryList.Count == 0)
+                return new ExerciseResultModel
+                {
+                    Success = true,
+                    Completed = false,
+                    Message = "Variables not found in the database.",
+                    Result = codeResult
+                };
+
+            tblExercise_User tblExercise_User = dbContext.tblExercise_Users.Where(ue => ue.idExercise == exerciseId && ue.idUser == userId).FirstOrDefault();
+
+            if(tblExercise_User == null)
+            {
+                tblExercise_User = new tblExercise_User
+                {
+                    idExercise = exerciseId,
+                    idUser = userId,
+                    IsCompleted = false,
+                    CompletedDate = null,
+                    Code = code.RemoveNulls(),
+                };
+
+                dbContext.tblExercise_Users.Add(tblExercise_User);
+                dbContext.SaveChanges();
+            }
+            else
+            {
+               tblExercise_User.Code = code.RemoveNulls();
+               dbContext.SaveChanges();
+            }
 
             foreach (Dictionary<string, Atom> variablesDictionary in variablesDictionaryList)
             {
-                InterpretResponseModel solutionResult = iService.Interpret(exercise.SolvedCode, "Romanian", userId, variablesDictionary);
-                InterpretResponseModel codeResult = iService.Interpret(code, "Romanian", userId, variablesDictionary);
+                Dictionary<string, Atom> vars = new(variablesDictionary);
+                InterpretResponseModel solutionResult = iService.Interpret(exercise.SolvedCode, "English", userId, vars);
 
+                vars = new(variablesDictionary);
+                codeResult = iService.Interpret(code, language, userId, vars);
 
                 if (!solutionResult.Success)
                     return new ExerciseResultModel
@@ -121,6 +156,15 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
                         Success = false,
                         Completed = false,
                         Message = "Code failed to evaluate.",
+                        Result = codeResult
+                    };
+                
+                if(variablesDictionary.Count == 0)
+                    return new ExerciseResultModel
+                    {
+                        Success = true,
+                        Completed = false,
+                        Message = "Variables not found in the database set.",
                         Result = codeResult
                     };
 
@@ -144,7 +188,7 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
                             Result = codeResult
                         };
 
-                    if (solutionVariableValue.Value != codeVariableValue.Value)
+                    if (solutionVariableValue.Value.ToString() != codeVariableValue.Value.ToString())
                         return new ExerciseResultModel
                         {
                             Success = true,
@@ -152,29 +196,23 @@ public class ExerciseService(AppDbContext dbContext, InterpreterService iService
                             Message = "End result variable values don't match with solution.",
                             Result = codeResult
                         };
-
-                    return new ExerciseResultModel
-                    {
-                        Success = true,
-                        Completed = true,
-                        Message = "Congratulations! You've completed the exercise.",
-                        Result = codeResult
-                    };
                 }
+            }
 
-                return new ExerciseResultModel
-                {
-                    Success = false,
-                    Completed = false,
-                    Message = "Missing solution variables values in the database."
-                };
+            if(codeResult != null)
+            {
+                tblExercise_User.IsCompleted = true;
+                tblExercise_User.CompletedDate = DateTime.UtcNow;
+                tblExercise_User.ExecutionTime = codeResult.ExecutionTime.ToString();
+                dbContext.SaveChanges();
             }
 
             return new ExerciseResultModel
             {
-                Success = false,
-                Completed = false,
-                Message = "Missing solution variables values in the database."
+                Success = true,
+                Completed = codeResult != null,
+                Message = codeResult != null ? "Congratulations! You've completed the exercise." : "Code failed to evaluate.",
+                Result = codeResult
             };
         }
         catch (Exception ex)

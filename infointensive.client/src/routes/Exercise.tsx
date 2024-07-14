@@ -45,7 +45,7 @@ export default () => {
             </div>
             {exercise != null ? 
                 <div className="codeEditorWrapper">
-                    <CodeEditor defaultCode={exercise?.defaultCode} />
+                    <CodeEditor defaultCode={exercise?.defaultCode} exerciseId={id} />
                 </div>
             : <></>}
         </div>

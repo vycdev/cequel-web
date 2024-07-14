@@ -259,10 +259,10 @@ const InterpretDemo = async (code: string, language: string) => {
         },
         body: JSON.stringify({ code, language })
     })
-    .then(d => d.json())
-    .then(d => {
-        result = d;
-    })
+        .then(d => d.json())
+        .then(d => {
+            result = d;
+        })
 
     return result;
 }
@@ -273,22 +273,50 @@ const Interpret = async (code: string, language: string) => {
     if (code[code.length - 1] != '\0')
         code += '\0';
 
-    await authorizedRequest("/api/interpreter/interpret/", "POST", { code, language }) 
-    .then(d => d.json())
-    .then(d => {
-        result = d;
-    })
+    await authorizedRequest("/api/interpreter/interpret/", "POST", { code, language })
+        .then(d => d.json())
+        .then(d => {
+            result = d;
+        })
+
+    return result;
+}
+
+const EvaluateExercise = async (code: string, language: string, exerciseId: number) => {
+    let result;
+
+    if (code[code.length - 1] != '\0')
+        code += '\0';
+
+    await authorizedRequest("/api/exercise/Evaluate", "POST", { code, language, exerciseId })
+        .then(d => d.json())
+        .then(d => {
+            result = d.result;
+
+            if (d.completed) {
+                result.output = d.message + "\n" + d.result.output;
+            }
+            else {
+                result.output = d.message;
+            }
+
+            if (!result) {
+                result = d;
+            }
+        })
 
     return result;
 }
 
 interface CodeEditorProps {
     defaultCode?: string
+    exerciseId?: string
 }
 
 export default (props: CodeEditorProps) => {
     const userContext = useContext(UserContext);
     const defaultCodeValue = props.defaultCode ?? "// Simple hello world in pseudocode\nwrite 'Hello World!'\n";
+    const exerciseId = props?.exerciseId;
 
     const [code, setCode] = useState(defaultCodeValue);
     const [output, setOutput] = useState("Run your code for the output to change.");
@@ -301,7 +329,20 @@ export default (props: CodeEditorProps) => {
     const Run = async (_) => {
         setButtonDisabled(true);
         setOutput("Running code...");
-        const result = userContext?.user ? await Interpret(code, language) : await InterpretDemo(code, language);
+
+        let result;
+
+        if (userContext?.user) {
+            if (exerciseId) {
+                result = await EvaluateExercise(code, language, parseInt(exerciseId))
+            }
+            else {
+                result = await Interpret(code, language);
+            }
+        } else {
+            result = await InterpretDemo(code, language);
+        }
+
         setButtonDisabled(false);
 
         let resultString = (result.success ? result.output : result.message);
@@ -320,21 +361,20 @@ export default (props: CodeEditorProps) => {
     const OnLanguageChange = (e) => {
         if (e.target.value === "English") {
             let translatedCode = code
-                .replace("scrie ", "write ")
-                .replace("daca ", "if ")
-                .replace("atunci ", "then ")
-                .replace("altfel ", "else ")
-                .replace("cat timp ", "while ")
-                .replace("executa ", "do ")
-                .replace("repeta ", "repeat ")
-                .replace("pana cand ", "until ")
-                .replace("pentru ", "for ")
-                .replace("citeste ", "read ");
+                .replace("scrie", "write")
+                .replace("daca", "if")
+                .replace("atunci", "then")
+                .replace("altfel", "else")
+                .replace("cat timp", "while")
+                .replace("executa", "do")
+                .replace("repeta", "repeat")
+                .replace("pana cand", "until")
+                .replace("pentru", "for")
+                .replace("citeste", "read");
 
             setCode(translatedCode);
         }
-        else
-        {
+        else {
             let translatedCode = code
                 .replace("write ", "scrie ")
                 .replace("if ", "daca ")

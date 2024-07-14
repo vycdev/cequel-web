@@ -14,7 +14,7 @@ public class InterpreterService(AppDbContext dbContext)
     public InterpretResponseModel Interpret(string code, string language, int userId)
     {
         DateTime startTime = DateTime.Now;
-        
+
         try
         {
             Tokenizer tokenizer = new(code, language == "Romanian" ? Languages.romanian : Languages.english);
@@ -22,23 +22,19 @@ public class InterpreterService(AppDbContext dbContext)
             Parser parser = new(tokenizer.Tokens);
             parser.Parse();
 
-            Evaluator.Variables.Clear();
-            Evaluator.Output = string.Empty;
-
-            Evaluator evaluator = new();
+            Evaluator evaluator = new(startTime, TimeSpan.FromSeconds(userId == 0 ? 0.5f : 5));
             evaluator.Evaluate(parser.GetTree());
 
-            if(Evaluator.Output.Length > 0 && Evaluator.Output[0] == '\n')
-            {
-                Evaluator.Output = Evaluator.Output.Remove(0, 1);
-            }
+            if (evaluator.Output.Length > 0 && evaluator.Output[0] == '\n')
+                evaluator.Output = evaluator.Output.Remove(0, 1);
 
-            return new() {
+            return new()
+            {
                 ExecutionTime = DateTime.Now - startTime,
                 Success = true,
-                Result = Evaluator.Variables,
+                Result = evaluator.Variables,
                 Message = "Code interpreted successfully.",
-                Output = Evaluator.Output
+                Output = evaluator.Output
             };
         }
         catch (ParserException ex)
@@ -66,7 +62,7 @@ public class InterpreterService(AppDbContext dbContext)
                 InsertDate = DateTime.UtcNow,
                 Message = ex.Message,
                 StackTrace = (ex?.StackTrace ?? string.Empty),
-                idUser = userId, 
+                idUser = userId,
                 Extra1 = code.RemoveNulls(),
                 Extra2 = language
             });
@@ -76,5 +72,4 @@ public class InterpreterService(AppDbContext dbContext)
             throw;
         }
     }
-
 }

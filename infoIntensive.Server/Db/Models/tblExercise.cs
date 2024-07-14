@@ -13,4 +13,5 @@ public class tblExercise
 
     public string Description { get; set; }
     public string DefaultCode { get; set; }
+    public string SolvedCode { get; set; }
 }

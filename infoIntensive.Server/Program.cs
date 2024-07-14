@@ -1,10 +1,8 @@
 using infoIntensive.Server.Db;
 using infoIntensive.Server.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics.Eventing.Reader;
 using System.Reflection;
 using System.Text;
 

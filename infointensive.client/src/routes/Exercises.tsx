@@ -1,4 +1,4 @@
-import { Button, ProgressBar, Form } from 'react-bootstrap';
+import { ProgressBar, Form } from 'react-bootstrap';
 
 import {
     Table,
@@ -9,159 +9,119 @@ import {
     HeaderCell,
     Cell,
 } from '@table-library/react-table-library/table';
+import { authorizedRequest } from '../App';
+import { useEffect, useState } from 'react';
 
-const nodes = [
-    {
-        id: '0',
-        title: 'Smallest common divider',
-        completionDate: new Date(2020, 1, 15),
-        isComplete: true,
-        difficulty: 5,
-    },
-    {
-        id: '1',
-        title: 'Array Rotation',
-        completionDate: new Date(2021, 3, 22),
-        isComplete: true,
-        difficulty: 3,
-    },
-    {
-        id: '2',
-        title: 'Palindrome Checker',
-        completionDate: null,
-        isComplete: false,
-        difficulty: 2,
-    },
-    {
-        id: '3',
-        title: 'Binary Search Algorithm',
-        completionDate: new Date(2021, 6, 5),
-        isComplete: true,
-        difficulty: 4,
-    },
-    {
-        id: '4',
-        title: 'Fibonacci Sequence Generator',
-        completionDate: null,
-        isComplete: false,
-        difficulty: 3,
-    },
-    {
-        id: '5',
-        title: 'Merge Sort Implementation',
-        completionDate: new Date(2021, 9, 21),
-        isComplete: true,
-        difficulty: 5,
-    },
-    {
-        id: '6',
-        title: 'Matrix Multiplication',
-        completionDate: null,
-        isComplete: false,
-        difficulty: 4,
-    },
-    {
-        id: '7',
-        title: 'Longest Common Subsequence',
-        completionDate: new Date(2021, 12, 25),
-        isComplete: true,
-        difficulty: 5,
-    },
-    {
-        id: '8',
-        title: 'Prime Number Generator',
-        completionDate: null,
-        isComplete: false,
-        difficulty: 9,
-    },
-    {
-        id: '9',
-        title: 'Graph Traversal (DFS)',
-        completionDate: null,
-        isComplete: false,
-        difficulty: 4,
-    },
-    {
-        id: '10',
-        title: 'Tic-Tac-Toe Game',
-        completionDate: new Date(2022, 5, 12),
-        isComplete: true,
-        difficulty: 6,
-    },
-    {
-        id: '11',
-        title: 'Quick Sort Algorithm',
-        completionDate: new Date(2022, 7, 10),
-        isComplete: false,
-        difficulty: 5,
-    },
-    {
-        id: '12',
-        title: 'Knapsack Problem',
-        completionDate: new Date(2022, 8, 18),
-        isComplete: true,
-        difficulty: 5,
-    },
-    {
-        id: '13',
-        title: 'Dijkstra\'s Algorithm',
-        completionDate: new Date(2022, 9, 25),
-        isComplete: false,
-        difficulty: 4,
-    },
-    {
-        id: '14',
-        title: 'Tower of Hanoi',
-        completionDate: new Date(2022, 10, 14),
-        isComplete: true,
-        difficulty: 3,
-    },
-    {
-        id: '15',
-        title: 'Binary Tree Traversal (Inorder)',
-        completionDate: new Date(2022, 11, 7),
-        isComplete: true,
-        difficulty: 3,
-    },
-    {
-        id: '16',
-        title: 'Heap Sort Implementation',
-        completionDate: new Date(2023, 0, 12),
-        isComplete: false,
-        difficulty: 5,
-    },
-    {
-        id: '17',
-        title: 'Anagram Checker',
-        completionDate: new Date(2023, 1, 20),
-        isComplete: true,
-        difficulty: 2,
-    },
-    {
-        id: '18',
-        title: 'Roman to Integer Conversion',
-        completionDate: new Date(2023, 2, 5),
-        isComplete: false,
-        difficulty: 3,
-    },
-    {
-        id: '19',
-        title: 'Sudoku Solver',
-        completionDate: new Date(2023, 3, 18),
-        isComplete: true,
-        difficulty: 4,
-    },
-    {
-        id: '20',
-        title: 'LRU Cache Implementation',
-        completionDate: new Date(2023, 4, 27),
-        isComplete: false,
-        difficulty: 5,
-    },
-];
+//const nodes = [
+//    {
+//        id: '0',
+//        title: 'Biggest common divider',
+//        completionDate: new Date(2020, 1, 15),
+//        isComplete: true,
+//        difficulty: 5,
+//    },
+//    {
+//        id: '1',
+//        title: 'Add two numbers',
+//        completionDate: new Date(2021, 3, 22),
+//        isComplete: true,
+//        difficulty: 1,
+//    },
+//    {
+//        id: '2',
+//        title: 'Palindrome number checker',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 5,
+//    },
+//    {
+//        id: '3',
+//        title: 'Find nth number in fibonacci sequence',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 4,
+//    },
+//    {
+//        id: '4',
+//        title: 'Prime Number Generator',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 4,
+//    },
+//    {
+//        id: '5',
+//        title: 'Equation solution finder',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 6,
+//    },
+//    {
+//        id: '6',
+//        title: 'Calculate the hypotenosis',
+//        completionDate: new Date(2022, 8, 18),
+//        isComplete: true,
+//        difficulty: 2,
+//    },
+//    {
+//        id: '7',
+//        title: 'Invert a number',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 4,
+//    },
+//    {
+//        id: '8',
+//        title: 'Find solution of 2nd degree equation',
+//        completionDate: new Date(2022, 10, 14),
+//        isComplete: true,
+//        difficulty: 5,
+//    },
+//    {
+//        id: '9',
+//        title: 'Check if number is divisible with its inverse',
+//        completionDate: new Date(2022, 11, 7),
+//        isComplete: true,
+//        difficulty: 6,
+//    },
+//    {
+//        id: '10',
+//        title: 'Triangle area calculator',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 2,
+//    },
+//    {
+//        id: '11',
+//        title: 'Find the smallest digit in a number',
+//        completionDate: new Date(2023, 1, 20),
+//        isComplete: true,
+//        difficulty: 5,
+//    },
+//    {
+//        id: '12',
+//        title: 'Roman to Integer Conversion',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 3,
+//    },
+//    {
+//        id: '13',
+//        title: 'Find the biggest digit in a number',
+//        completionDate: new Date(2023, 3, 18),
+//        isComplete: true,
+//        difficulty: 4,
+//    },
+//    {
+//        id: '14',
+//        title: 'Add digits of the number together',
+//        completionDate: null,
+//        isComplete: false,
+//        difficulty: 5,
+//    },
+//];
 
 const getVariant = (difficulty) => {
-    if (difficulty <= 3) 
+    if (difficulty <= 3)
         return 'success'
     if (difficulty > 3 && difficulty <= 6)
         return 'warning'
@@ -170,6 +130,20 @@ const getVariant = (difficulty) => {
 }
 
 export default () => {
+    const [nodes, setNodes] = useState([]);
+
+    const getExercises = async () => {
+        await authorizedRequest("/api/exercise/getExercises", "GET", {})
+            .then(d => d.json())
+            .then(d => {
+                setNodes(d);
+            })
+    }
+
+    useEffect(() => {
+        getExercises();
+    }, []);
+
     return <div id="exercisesWrapper">
         <div className="contentBox">
             <h3>Exercises</h3>

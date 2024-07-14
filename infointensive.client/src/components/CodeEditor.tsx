@@ -10,7 +10,8 @@ import { UserContext, authorizedRequest } from "../App";
 // This config defines the editor's view.
 export const options = {
     padding: { top: 10, bottom: 10 },
-    minimap: { enabled: false }
+    minimap: { enabled: false },
+    wordWrap: "on"
 }
 
 // This config defines how the language is displayed in the editor.
@@ -251,7 +252,7 @@ const InterpretDemo = async (code: string, language: string) => {
     if (code[code.length - 1] != '\0')
         code += '\0';
 
-    await fetch("api/interpreter/interpretdemo/", {
+    await fetch("/api/interpreter/interpretdemo/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -272,7 +273,7 @@ const Interpret = async (code: string, language: string) => {
     if (code[code.length - 1] != '\0')
         code += '\0';
 
-    await authorizedRequest("api/interpreter/interpret/", "POST", { code, language }) 
+    await authorizedRequest("/api/interpreter/interpret/", "POST", { code, language }) 
     .then(d => d.json())
     .then(d => {
         result = d;
@@ -281,10 +282,15 @@ const Interpret = async (code: string, language: string) => {
     return result;
 }
 
-export default () => {
-    const userContext = useContext(UserContext);
+interface CodeEditorProps {
+    defaultCode?: string
+}
 
-    const [code, setCode] = useState("// Simple hello world in pseudocode\nwrite 'Hello World!' \n");
+export default (props: CodeEditorProps) => {
+    const userContext = useContext(UserContext);
+    const defaultCodeValue = props.defaultCode ?? "// Simple hello world in pseudocode\nwrite 'Hello World!'\n";
+
+    const [code, setCode] = useState(defaultCodeValue);
     const [output, setOutput] = useState("Run your code for the output to change.");
     const [language, setLanguage] = useState("English");
     const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -306,10 +312,9 @@ export default () => {
     }
 
     const Reset = (_) => {
-        if (language === "Romanian")
-            setCode("// Simple hello world in pseudocode\nscrie 'Hello World!'\n")
-        else
-            setCode("// Simple hello world in pseudocode\nwrite 'Hello World!'\n")
+        setCode(defaultCodeValue)
+        setOutput("Run your code for the output to change.");
+        setButtonDisabled(false);
     }
 
     const OnLanguageChange = (e) => {

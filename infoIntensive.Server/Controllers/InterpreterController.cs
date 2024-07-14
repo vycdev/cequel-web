@@ -1,9 +1,7 @@
 ﻿using infoIntensive.Server.Models;
 using infoIntensive.Server.Services;
-using Interpreter_lib.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -38,7 +36,7 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
                 return new InterpretResponseModel
                 {
                     Success = false,
-                    Message = "Code is too long. Maximum 1000 characters."
+                    Message = "Code is too long. Maximum 2000 characters."
                 };
             }
 
@@ -46,16 +44,11 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
         }
         catch (Exception)
         {
-            if(Debugger.IsAttached)
-            {
-                throw;
-            }
-
             return new InterpretResponseModel
             {
                 Success = false,
                 Message = "An unexpected error occurred. Please try again later."
-            };
+            };            
         }
     }
 
@@ -81,7 +74,7 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
                 return new InterpretResponseModel
                 {
                     Success = false,
-                    Message = "Code is too long. Maximum 1000 characters."
+                    Message = "Code is too long. Maximum 2000 characters."
                 };
             }
 
@@ -89,11 +82,6 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
         }
         catch (Exception)
         {
-            if(Debugger.IsAttached)
-            {
-                throw;
-            }
-
             return new InterpretResponseModel
             {
                 Success = false,
@@ -101,6 +89,4 @@ public class InterpreterController(InterpreterService iService) : ControllerBase
             };
         }
     }
-
-    // TODO add interpret non demo with autorization with less limits
 }

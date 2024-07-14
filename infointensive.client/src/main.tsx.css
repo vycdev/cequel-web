@@ -414,8 +414,11 @@ nav .menu span {
     align-items: center;
     gap: 20px;
     padding: 50px;
+}
 
-
+#exercisesWrapper th, 
+#exercisesWrapper td {
+    max-height: 35px;
 }
 
 #exercisesWrapper .contentBox {
@@ -434,7 +437,7 @@ nav .menu span {
 }
 
 #exercisesWrapper .table {
-    height: calc(100% - 55px);
+    /*height: calc(100% - 55px);*/
     overflow-y: auto;
 
     --data-table-library_grid-template-columns: minmax(0px, 0.3fr) minmax(0px, 1.6fr) minmax(0px, 1fr) minmax(0px, 0.6fr) minmax(0px, 0.6fr) !important; 

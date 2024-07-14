@@ -49,7 +49,7 @@ export const authorizedRequest = async (url: string, method: string, body?: any)
             "Content-Type": "application/json",
             "Authorization": "Bearer " + userContext?.accessToken
         },
-        body: JSON.stringify(body)
+        body: method === "GET" ? null : JSON.stringify(body)
     }).then(async response => {
         if (response.status === 401) {
             // TODO: implement queue for refresh requests that are happening in parallel

@@ -8,7 +8,7 @@ import { useState, useEffect, useContext } from "react";
 import { UserContext, authorizedRequest } from "../App";
 
 // This config defines the editor's view.
-export const options = {
+export const options: any = {
     padding: { top: 10, bottom: 10 },
     minimap: { enabled: false },
     wordWrap: "on"

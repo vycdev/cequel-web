@@ -12,6 +12,7 @@ import {
 import { UserContext, authorizedRequest } from '../App';
 import { useContext, useEffect, useState } from 'react';
 import ContentBox from '../components/ContentBox';
+import { useNavigate } from 'react-router-dom';
 
 //const nodes = [
 //    {
@@ -134,6 +135,8 @@ export default () => {
     const userContext = useContext(UserContext);
     const [nodes, setNodes] = useState([]);
 
+    const navigate = useNavigate();
+
     const getExercises = async () => {
         await authorizedRequest("/api/exercise/getExercises", "GET", {})
             .then(d => d.json())
@@ -174,7 +177,7 @@ export default () => {
 
                         <Body>
                             {tableList.map((item) => (
-                                <Row className="row" key={item.id} item={item} onClick={(item, _) => window.location.href = "/exercise/" + item.id}>
+                                <Row className="row" key={item.id} item={item} onClick={(item, _) => navigate("/exercise/" + item.id)}>
                                     <Cell className="idCell">{item.id}</Cell>
                                     <Cell>{item.title}</Cell>
                                     <Cell><ProgressBar variant={getVariant(item.difficulty)} now={item.difficulty * 10}></ProgressBar></Cell>

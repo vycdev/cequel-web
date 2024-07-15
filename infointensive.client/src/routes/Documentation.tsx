@@ -40,17 +40,137 @@ write 20
 write "Hello"
 \`\`\`
 
-
 ### Operators
-The pseudocode language that is used in **InfoIntensive** supports all of the usual arithmetic and boolean operators. The arithmetic operators are used to perform mathematical operations, while the boolean operators are used to perform logical operations.
+The pseudocode language used in **InfoIntensive** supports a variety of arithmetic, comparison, logical, and bitwise operators. These operators are essential for performing mathematical computations, logical evaluations, and bit-level operations.
 
 #### Arithmetic operators
- - \`+\`: addition
- - \`-\`: subtraction
- - \`*\`: multiplication
- - \`/\`: division
- - \`%\`: modulo
- - \`^2\`: power of 2
+ - \`+ \`: addition (e.g., \`a + b\`)
+ - \`- \`: subtraction (e.g., \`a - b\`)
+ - \`* \`: multiplication (e.g., \`a * b\`)
+ - \`/ \`: division (e.g., \`a / b\`)
+ - \`% \`: modulo (e.g., \`a % b\`)
+ - \`^ \`: exponentiation (e.g., \`a ^ b\`)
+
+#### Grouping operators
+ - \`(\`: start of a group (e.g., \`(a + b)\`)
+ - \`)\`: end of a group (e.g., \`a + b)\`)
+ - \`[]\`: integer part of a number or expression (e.g., \`[a]\`)
+
+#### Comparison operators
+ - \`= \`: equal to (e.g., \`a = b\`)
+ - \`!= \`: not equal to (e.g., \`a != b\`)
+ - \`< \`: less than (e.g., \`a < b\`)
+ - \`> \`: greater than (e.g., \`a > b\`)
+ - \`<= \`: less than or equal to (e.g., \`a <= b\`)
+ - \`>= \`: greater than or equal to (e.g., \`a >= b\`)
+
+#### Logical operators
+ - \`&&\`: logical AND (e.g., \`a && b\`)
+ - \`||\`: logical OR (e.g., \`a || b\`)
+ - \`!\`: logical NOT (e.g., \`!a\`)
+
+#### Bitwise operators
+ - \`& \`: bitwise AND (e.g., \`a & b\`)
+ - \`| \`: bitwise OR (e.g., \`a | b\`)
+ - \`^ \`: bitwise XOR (e.g., \`a ^ b\`)
+ - \`~\`: bitwise NOT (e.g., \`~a\`)
+ - \`<< \`: bitwise left shift (e.g., \`a << b\`)
+ - \`>> \`: bitwise right shift (e.g., \`a >> b\`)
+
+### Instructions
+The pseudocode language used in **InfoIntensive** provides various control flow structures to handle conditional logic and looping. Below are the descriptions and examples of these instructions.
+
+#### Conditional Statements
+Conditional statements allow the execution of instructions based on the evaluation of an expression.
+
+- **if-else statement**
+  Evaluates an expression and executes one set of instructions if the expression is true and another set if it is false.
+
+  \`\`\`plaintext
+  if <expression> then
+      <instruction 1>
+  else
+      <instruction 2>
+  \`\`\`
+
+  **Example:**
+
+  \`\`\`plaintext
+  if x > 0 then
+      print("Positive number")
+  else
+      print("Non-positive number")
+  \`\`\`
+
+#### Looping Statements
+Looping statements allow the execution of a set of instructions multiple times based on the evaluation of expressions.
+
+- **for loop**
+  Iterates over a range of values. The range is defined by an initial assignation and two expressions.
+
+  \`\`\`plaintext
+  for <assignation>, <expression>, <expression> do
+      <instruction>
+  \`\`\`
+
+  **Example:**
+
+  \`\`\`plaintext
+  for i = 1, i <= 10, i = i + 1 do
+      print(i)
+  \`\`\`
+
+- **while loop**
+  Executes a set of instructions as long as an expression evaluates to true.
+
+  \`\`\`plaintext
+  while <expression> do
+      <instruction>
+  \`\`\`
+
+  **Example:**
+
+  \`\`\`plaintext
+  while x < 100 do
+      x = x * 2
+  \`\`\`
+
+- **do-while loop**
+  Executes a set of instructions at least once, then continues to execute them as long as an expression evaluates to true.
+
+  \`\`\`plaintext
+  do
+      <instruction>
+  while <expression>
+  \`\`\`
+
+  **Example:**
+
+  \`\`\`plaintext
+  do
+      x = x - 1
+  while x > 0
+  \`\`\`
+
+- **repeat-until loop**
+  Executes a set of instructions at least once, then continues to execute them until an expression evaluates to true.
+
+  \`\`\`plaintext
+  repeat
+      <instruction>
+  until <expression>
+  \`\`\`
+
+  **Example:**
+
+  \`\`\`plaintext
+  repeat
+      x = x + 1
+  until x == 10
+  \`\`\`
+
+#### Notes on Indentation
+In this pseudocode language, indentation is significant and determines the scope of loops and conditional statements. Ensure that each block of code within these structures is properly indented to avoid logical errors.
 
 `
 
